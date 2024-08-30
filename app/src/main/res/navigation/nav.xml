@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/page_inicio">
+
+    <fragment
+        android:id="@id/page_inicio"
+        android:name="com.example.diskotekee.InicioFragment"
+        tools:layout="@layout/fragment_inicio"/>
+    <fragment
+        android:id="@id/page_bar"
+        android:name="com.example.diskotekee.BarFragment"
+        tools:layout="@layout/fragment_bar"/>
+    <fragment
+        android:id="@id/page_social"
+        android:name="com.example.diskotekee.SocialFragment"
+        tools:layout="@layout/fragment_social"/>
+    <fragment
+        android:id="@id/page_juegos"
+        android:name="com.example.diskotekee.JuegosFragment"
+        tools:layout="@layout/fragment_juegos"/>
+</navigation>

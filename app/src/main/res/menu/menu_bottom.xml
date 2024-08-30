@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:id="@+id/page_inicio"
+    android:icon="@drawable/baseline_home_24"
+    android:title="Inicio"/>
+    <item
+        android:id="@+id/page_bar"
+        android:icon="@drawable/baseline_local_bar_24"
+        android:title="Bar"/>
+    <item
+        android:id="@+id/page_social"
+        android:icon="@drawable/baseline_local_fire_department_24"
+        android:title="Social"/>
+    <item
+        android:id="@+id/page_juegos"
+        android:icon="@drawable/baseline_videogame_asset_24"
+        android:title="Minijuegos"/>
+
+</menu>
