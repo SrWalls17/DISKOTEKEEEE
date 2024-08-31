@@ -15,6 +15,12 @@
         android:theme="@style/Theme.DISKOTEKEE"
         tools:targetApi="31">
         <activity
+            android:name=".VerdadoReto"
+            android:exported="false" />
+        <activity
+            android:name=".Ruleta"
+            android:exported="false" />
+        <activity
             android:name=".Menu"
             android:exported="false" />
         <activity
