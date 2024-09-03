@@ -18,7 +18,7 @@
             android:name=".VerdadoReto"
             android:exported="false" />
         <activity
-            android:name=".Ruleta"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".Menu"
@@ -27,7 +27,7 @@
             android:name=".Principal"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Ruleta"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
