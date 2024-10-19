@@ -6,10 +6,11 @@
     android:layout_height="match_parent"
     android:background="#48AFB0B1"
     tools:context=".BarFragment">
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieAnimationView"
-        android:layout_width="162dp"
-        android:layout_height="183dp"
+        android:layout_width="139dp"
+        android:layout_height="118dp"
         android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.518"

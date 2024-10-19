@@ -15,6 +15,9 @@
         android:theme="@style/Theme.DISKOTEKEE"
         tools:targetApi="31">
         <activity
+            android:name=".Registro"
+            android:exported="false" />
+        <activity
             android:name=".Busqueda"
             android:exported="false" />
         <activity
@@ -27,13 +30,13 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".Menu"
-            android:exported="false" />
-        <activity
-            android:name=".Registro"
+            android:name=".Feedback"
             android:exported="false" />
         <activity
             android:name=".Principal"
+            android:exported="false" />
+        <activity
+            android:name=".Menu"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

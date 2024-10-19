@@ -21,7 +21,7 @@ public class Busqueda extends AppCompatActivity {
         setContentView(R.layout.activity_busqueda);
 
         tvUsuarios = findViewById(R.id.tv_usuarios);
-        ivAtras = findViewById(R.id.iv_atras);
+        ivAtras = findViewById(R.id.regreso);
 
         // Cargar los usuarios desde la base de datos y mostrarlos en el TextView
         cargarUsuarios();
@@ -39,7 +39,7 @@ public class Busqueda extends AppCompatActivity {
     }
 
     private void cargarUsuarios() {
-        ConexionDbHelper helper = new ConexionDbHelper(this, "APPSQLITE", null, 1);
+        ConexionDbHelper helper = new ConexionDbHelper(this, "APPSQLITE", null, 2);
         SQLiteDatabase db = helper.getReadableDatabase();
 
         Cursor cursor = null;
@@ -55,16 +55,21 @@ public class Busqueda extends AppCompatActivity {
 
             // Recorre el cursor y añade cada registro a la variable StringBuilder
             while (cursor.moveToNext()) {
-                // Cambiar "Nombre", "Apellido", "Email" y "Clave" a "NOMBRE", "APELLIDO", "EMAIL" y "CLAVE"
+                // Obtener valores de las columnas de la tabla USUARIOS
                 String nombre = cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE"));
                 String apellido = cursor.getString(cursor.getColumnIndexOrThrow("APELLIDO"));
                 String email = cursor.getString(cursor.getColumnIndexOrThrow("EMAIL"));
                 String clave = cursor.getString(cursor.getColumnIndexOrThrow("CLAVE"));
+                int match = cursor.getInt(cursor.getColumnIndexOrThrow("MATCHS"));
+                int amistades = cursor.getInt(cursor.getColumnIndexOrThrow("AMISTADES"));
 
+                // Añadir la información al StringBuilder
                 usuarios.append("Nombre: ").append(nombre).append("\n")
                         .append("Apellido: ").append(apellido).append("\n")
                         .append("Email: ").append(email).append("\n")
-                        .append("Clave: ").append(clave).append("\n\n"); // Añadir un salto de línea entre usuarios
+                        .append("Clave: ").append(clave).append("\n")
+                        .append("Matchs: ").append(match).append("\n")
+                        .append("Amistades: ").append(amistades).append("\n\n"); // Añadir un salto de línea entre usuarios
             }
 
             // Muestra los usuarios en el TextView

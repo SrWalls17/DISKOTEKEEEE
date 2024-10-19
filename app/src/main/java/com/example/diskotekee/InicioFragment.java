@@ -1,18 +1,14 @@
 package com.example.diskotekee;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link InicioFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.fragment.app.Fragment;
+
 public class InicioFragment extends Fragment {
 
     public InicioFragment() {
@@ -36,6 +32,22 @@ public class InicioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_inicio, container, false);
+        View view = inflater.inflate(R.layout.fragment_inicio, container, false);
+
+        // Identificar el botón de feedback
+        Button feedbackButton = view.findViewById(R.id.feedback);
+
+        // Agregar listener para redirigir a la actividad Feedback
+        feedbackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Mostrar el diálogo de calificación cuando el botón de feedback sea presionado
+                RateUsDialog rateUsDialog = new RateUsDialog(getActivity());
+                rateUsDialog.setCancelable(false);
+                rateUsDialog.show();
+            }
+        });
+
+        return view;
     }
 }

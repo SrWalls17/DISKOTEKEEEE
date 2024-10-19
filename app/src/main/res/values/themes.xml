@@ -7,4 +7,11 @@
 
     <style name="Theme.DISKOTEKEE" parent="Base.Theme.DISKOTEKEE" />
 
+    <style name="MyRatingBar" parent="Widget.AppCompat.RatingBar">
+
+        <!--No seleccionado -->
+        <item name="colorControlNormal">#4D000000</item>
+        <!--Seleccionado -->
+        <item name="colorControlActivated">@color/dialog_color_1</item>
+    </style>
 </resources>

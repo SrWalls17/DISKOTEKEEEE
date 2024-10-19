@@ -13,7 +13,7 @@
         android:layout_width="130dp"
         android:layout_height="150dp"
         android:layout_marginStart="124dp"
-        android:layout_marginTop="168dp"
+        android:layout_marginTop="56dp"
         android:layout_marginEnd="124dp"
         android:src="@drawable/ruleta"
         app:layout_constraintEnd_toEndOf="parent"

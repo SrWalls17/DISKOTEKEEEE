@@ -10,20 +10,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.widget.TextView;
 
 public class Principal extends AppCompatActivity {
-    EditText usuario,password;
+    EditText usuario, password;
+    TextView crear_cuenta; // Cambiado a TextView
     Button ingresar;
 
     @Override
@@ -31,15 +22,15 @@ public class Principal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
 
-        usuario=(EditText) findViewById(R.id.frmusuario);
-        password=(EditText) findViewById(R.id.frmpass);
-        ingresar=(Button) findViewById(R.id.btningresar);
-
+        usuario = (EditText) findViewById(R.id.frmusuario);
+        password = (EditText) findViewById(R.id.frmpass);
+        ingresar = (Button) findViewById(R.id.btningresar);
+        crear_cuenta = (TextView) findViewById(R.id.crear_cuenta); // Inicializa el TextView "Crear Cuenta"
 
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-
+        // Redirigir al hacer clic en "Ingresar"
         ingresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,6 +53,14 @@ public class Principal extends AppCompatActivity {
             }
         });
 
+        // Redirigir a la ventana Registro al hacer clic en "Crear Cuenta"
+        crear_cuenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent registroIntent = new Intent(Principal.this, Registro.class);
+                startActivity(registroIntent);
+            }
+        });
     }
 
     private boolean autenticarUsuario(String correo, String contraseña) {
@@ -88,5 +87,4 @@ public class Principal extends AppCompatActivity {
 
         return verificacionExitosa;
     }
-
 }
