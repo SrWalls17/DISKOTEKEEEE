@@ -34,13 +34,10 @@ public class Registro extends AppCompatActivity {
         clave = findViewById(R.id.txtclave);
         clave2 = findViewById(R.id.txtclave2);
         btn_reg = findViewById(R.id.btn_registro);
-
-        // Añadir referencia a los SwitchButtons
         switchMatch = findViewById(R.id.switch_match);
         switchAmistades = findViewById(R.id.switch_amistades);
 
         ImageView regresoImage = findViewById(R.id.regreso);
-
         regresoImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,10 +56,18 @@ public class Registro extends AppCompatActivity {
                 String claveStr = clave.getText().toString();
                 String clave2Str = clave2.getText().toString();
 
-                boolean showAlert = false;
-
-                // Validaciones (igual que antes)
-                if (!showAlert) {
+                // Validaciones de campos
+                if (!isValidName(nombreStr)) {
+                    Toast.makeText(Registro.this, "Nombre inválido", Toast.LENGTH_SHORT).show();
+                } else if (!isValidName(apellidoStr)) {
+                    Toast.makeText(Registro.this, "Apellido inválido", Toast.LENGTH_SHORT).show();
+                } else if (!isValidEmail(emailStr)) {
+                    Toast.makeText(Registro.this, "Email inválido", Toast.LENGTH_SHORT).show();
+                } else if (!isValidPassword(claveStr)) {
+                    Toast.makeText(Registro.this, "Contraseña inválida", Toast.LENGTH_SHORT).show();
+                } else if (!claveStr.equals(clave2Str)) {
+                    Toast.makeText(Registro.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+                } else {
                     guardar(nombreStr, apellidoStr, emailStr, claveStr);
                 }
             }
@@ -70,8 +75,8 @@ public class Registro extends AppCompatActivity {
     }
 
     public void guardar(String nom, String ape, String mai, String cla) {
-        ConexionDbHelper helper = new ConexionDbHelper(this, "APPSQLITE", null, 2);
-        SQLiteDatabase db = helper.getReadableDatabase();
+        ConexionDbHelper helper = new ConexionDbHelper(this);
+        SQLiteDatabase db = helper.getWritableDatabase(); // Cambia a getWritableDatabase()
         try {
             ContentValues datos = new ContentValues();
             datos.put("Nombre", nom);
@@ -86,15 +91,21 @@ public class Registro extends AppCompatActivity {
             datos.put("MATCHS", matchValue);  // Guardar valor de match
             datos.put("AMISTADES", amistadesValue);  // Guardar valor de amistades
 
-            db.insert("USUARIOS", null, datos);
-            Toast.makeText(this, "Datos Ingresados Sin Problemas", Toast.LENGTH_LONG).show();
-            finish();
+            long newRowId = db.insert("USUARIOS", null, datos); // Guarda y obtiene el ID de la nueva fila
+            if (newRowId != -1) {
+                Toast.makeText(this, "Datos ingresados correctamente. ID: " + newRowId, Toast.LENGTH_LONG).show();
+                finish();
+            } else {
+                Toast.makeText(this, "Error al registrar los datos", Toast.LENGTH_LONG).show();
+            }
         } catch (Exception e) {
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        } finally {
+            db.close(); // Asegúrate de cerrar la base de datos
         }
     }
 
-    // Métodos de validación (igual que antes)
+    // Métodos de validación
     private boolean isValidEmail(String email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }

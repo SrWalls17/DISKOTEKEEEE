@@ -15,6 +15,17 @@
         android:theme="@style/Theme.DISKOTEKEE"
         tools:targetApi="31">
         <activity
+            android:name=".ListaFeedback"
+            android:exported="false" />
+        <activity
+            android:name=".Matchs"
+            android:exported="false" />
+        <activity
+            android:name=".Amistades"
+            android:exported="false"
+            android:label="@string/title_activity_match"
+            android:theme="@style/Theme.DISKOTEKEE" />
+        <activity
             android:name=".Registro"
             android:exported="false" />
         <activity
@@ -30,13 +41,13 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".Feedback"
-            android:exported="false" />
-        <activity
-            android:name=".Principal"
+            android:name=".ModificarEliminar"
             android:exported="false" />
         <activity
             android:name=".Menu"
+            android:exported="false" />
+        <activity
+            android:name=".Principal"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 
@@ -29,25 +30,47 @@ public class InicioFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inicio, container, false);
 
-        // Identificar el botón de feedback
+        // Configuración del botón para el feedback
         Button feedbackButton = view.findViewById(R.id.feedback);
+        Button listaFeedbackButton = view.findViewById(R.id.btn_lista_feedback);
+        ImageView atrasButton = view.findViewById(R.id.atras);
 
-        // Agregar listener para redirigir a la actividad Feedback
+        // Listener para redirigir a la actividad Feedback
         feedbackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Mostrar el diálogo de calificación cuando el botón de feedback sea presionado
                 RateUsDialog rateUsDialog = new RateUsDialog(getActivity());
                 rateUsDialog.setCancelable(false);
                 rateUsDialog.show();
             }
         });
 
+        // Listener para redirigir a la actividad ListaFeedback
+        listaFeedbackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ListaFeedback.class);
+                startActivity(intent);
+            }
+        });
+
+        // Listener para redirigir a la actividad ModificarEliminar
+        atrasButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Obtener el email del usuario (por ejemplo, de SharedPreferences)
+                String email = "usuario@example.com"; // Cambia esto por el valor real del email
+
+                Intent intent = new Intent(getActivity(), ModificarEliminar.class);
+                intent.putExtra("EMAIL", email);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
+
 }

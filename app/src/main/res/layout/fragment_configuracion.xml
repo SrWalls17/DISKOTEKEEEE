@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#48AFB0B1"
-    tools:context=".SocialFragment">
+    tools:context=".ConfiguracionFragment">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieAnimationView"
@@ -13,7 +13,6 @@
         android:layout_height="118dp"
         android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
@@ -21,54 +20,38 @@
         app:lottie_loop="true" />
 
     <Button
-        android:id="@+id/busqueda"
+        android:id="@+id/modificar"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="81dp"
+        android:layout_marginTop="30dp"
         android:backgroundTint="#373737"
-        android:text="Busqueda"
+        android:text="Editar Perfil"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView" />
 
     <Button
-        android:id="@+id/btn_match"
+        android:id="@+id/button2"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="81dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="#373737"
-        android:text="Match"
+        android:text="Configuración"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/busqueda" />
+        app:layout_constraintTop_toBottomOf="@+id/modificar" />
 
     <Button
-        android:id="@+id/btn_amistades"
+        android:id="@+id/btn_salir"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="81dp"
+        android:layout_marginTop="92dp"
         android:backgroundTint="#373737"
-        android:text="Amistades"
+        android:text="Cerrar Sesión"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_match" />
+        app:layout_constraintTop_toBottomOf="@+id/modificar" />
 
-    <Button
-        android:id="@+id/button11"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="81dp"
-        android:backgroundTint="#373737"
-        android:text="Compartir Perfil"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_amistades" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

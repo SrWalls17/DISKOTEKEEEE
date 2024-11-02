@@ -21,4 +21,8 @@
         android:id="@id/page_juegos"
         android:name="com.example.diskotekee.JuegosFragment"
         tools:layout="@layout/fragment_juegos"/>
+    <fragment
+        android:id="@id/page_configuracion"
+        android:name="com.example.diskotekee.ConfiguracionFragment"
+        tools:layout="@layout/fragment_configuracion"/>
 </navigation>

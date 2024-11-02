@@ -15,6 +15,9 @@
     <item
         android:id="@+id/page_juegos"
         android:icon="@drawable/baseline_videogame_asset_24"
-        android:title="Minijuegos"/>
-
+        android:title="Juegos"/>
+    <item
+        android:id="@+id/page_configuracion"
+        android:icon="@drawable/nav_settings"
+        android:title="Opciones"/>
 </menu>

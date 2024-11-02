@@ -22,7 +22,7 @@
         app:lottie_loop="true" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/modificar"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="129dp"
@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btn_salir"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="139dp"
@@ -45,7 +45,7 @@
         android:text="Promociones"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/modificar" />
 
     <Button
         android:id="@+id/feedback"
@@ -59,6 +59,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_salir" />
+
+    <Button
+        android:id="@+id/btn_lista_feedback"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="149dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginEnd="144dp"
+        android:backgroundTint="#373737"
+        android:text="Ver Puntuaciones"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.522"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/feedback" />
+
+    <ImageView
+        android:id="@+id/atras"
+        android:layout_width="113dp"
+        android:layout_height="89dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/atras"
+        app:layout_constraintEnd_toStartOf="@+id/lottieAnimationView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

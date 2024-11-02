@@ -105,7 +105,7 @@
                     android:id="@+id/laterBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:text="Quizás más tarde"
+                    android:text="Más tarde"
                     android:textAllCaps="false"
                     android:textColor="#CC000000"
                     android:paddingStart="20dp"

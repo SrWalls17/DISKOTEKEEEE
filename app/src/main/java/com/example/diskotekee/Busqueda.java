@@ -39,7 +39,7 @@ public class Busqueda extends AppCompatActivity {
     }
 
     private void cargarUsuarios() {
-        ConexionDbHelper helper = new ConexionDbHelper(this, "APPSQLITE", null, 2);
+        ConexionDbHelper helper = new ConexionDbHelper(this);
         SQLiteDatabase db = helper.getReadableDatabase();
 
         Cursor cursor = null;
@@ -56,6 +56,7 @@ public class Busqueda extends AppCompatActivity {
             // Recorre el cursor y añade cada registro a la variable StringBuilder
             while (cursor.moveToNext()) {
                 // Obtener valores de las columnas de la tabla USUARIOS
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow("ID")); // Obtener el ID
                 String nombre = cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE"));
                 String apellido = cursor.getString(cursor.getColumnIndexOrThrow("APELLIDO"));
                 String email = cursor.getString(cursor.getColumnIndexOrThrow("EMAIL"));
@@ -63,8 +64,9 @@ public class Busqueda extends AppCompatActivity {
                 int match = cursor.getInt(cursor.getColumnIndexOrThrow("MATCHS"));
                 int amistades = cursor.getInt(cursor.getColumnIndexOrThrow("AMISTADES"));
 
-                // Añadir la información al StringBuilder
-                usuarios.append("Nombre: ").append(nombre).append("\n")
+                // Añadir la información al StringBuilder, incluyendo el ID
+                usuarios.append("ID: ").append(id).append("\n")  // Mostrar el ID
+                        .append("Nombre: ").append(nombre).append("\n")
                         .append("Apellido: ").append(apellido).append("\n")
                         .append("Email: ").append(email).append("\n")
                         .append("Clave: ").append(clave).append("\n")

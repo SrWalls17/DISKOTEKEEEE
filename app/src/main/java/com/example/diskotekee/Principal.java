@@ -1,15 +1,16 @@
 package com.example.diskotekee;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log; // Importar Log para depuración
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Principal extends AppCompatActivity {
@@ -17,15 +18,17 @@ public class Principal extends AppCompatActivity {
     TextView crear_cuenta; // Cambiado a TextView
     Button ingresar;
 
+    ImageView ivAtras;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
 
-        usuario = (EditText) findViewById(R.id.frmusuario);
-        password = (EditText) findViewById(R.id.frmpass);
-        ingresar = (Button) findViewById(R.id.btningresar);
-        crear_cuenta = (TextView) findViewById(R.id.crear_cuenta); // Inicializa el TextView "Crear Cuenta"
+        usuario = findViewById(R.id.frmusuario);
+        password = findViewById(R.id.frmpass);
+        ingresar = findViewById(R.id.btningresar);
+        crear_cuenta = findViewById(R.id.crear_cuenta); // Inicializa el TextView "Crear Cuenta"
 
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -42,9 +45,10 @@ public class Principal extends AppCompatActivity {
                     usuario.setError("Debe rellenar campos");
                     password.setError("Debe rellenar campos");
                 } else if (autenticarUsuario(correo, contraseña)) {
-                    // Autenticación exitosa, redirige al usuario a su actividad principal
-                    Intent actividadPrincipal = new Intent(Principal.this, Menu.class);
-                    startActivity(actividadPrincipal);
+                    // Autenticación exitosa, redirige al usuario a la actividad Modificar
+                    Intent actividadModificar = new Intent(Principal.this, Menu.class);
+                    actividadModificar.putExtra("EMAIL", correo); // Puedes pasar el correo si lo necesitas
+                    startActivity(actividadModificar);
                 } else {
                     // Muestra un mensaje de error si las credenciales son incorrectas
                     usuario.setError("Credenciales incorrectas");
@@ -64,27 +68,47 @@ public class Principal extends AppCompatActivity {
     }
 
     private boolean autenticarUsuario(String correo, String contraseña) {
-        ConexionDbHelper helper = new ConexionDbHelper(this, "APPSQLITE", null, 1);
+        ConexionDbHelper helper = new ConexionDbHelper(this);
         SQLiteDatabase db = helper.getReadableDatabase();
 
-        // Consulta para verificar las credenciales
-        String[] columns = {"ID"};
+        String[] columns = {"ID", "NOMBRE", "APELLIDO", "EMAIL", "CLAVE", "MATCHS", "AMISTADES"};
         String selection = "Email = ? AND Clave = ?";
         String[] selectionArgs = {correo, contraseña};
 
         Cursor cursor = db.query("USUARIOS", columns, selection, selectionArgs, null, null, null);
 
-        // Comprueba si el cursor tiene al menos un resultado
-        boolean verificacionExitosa = cursor.getCount() > 0;
+        if (cursor.moveToFirst()) {
+            long id = cursor.getLong(cursor.getColumnIndex("ID"));
+            String nombre = cursor.getString(cursor.getColumnIndex("NOMBRE"));
+            String apellido = cursor.getString(cursor.getColumnIndex("APELLIDO"));
+            String email = cursor.getString(cursor.getColumnIndex("EMAIL"));
+            String clave = cursor.getString(cursor.getColumnIndex("CLAVE"));
+            int matchs = cursor.getInt(cursor.getColumnIndex("MATCHS"));
+            int amistades = cursor.getInt(cursor.getColumnIndex("AMISTADES"));
 
-        // Cierra la base de datos y el cursor
-        cursor.close();
-        db.close();
+            cursor.close();
+            db.close();
 
-        if (!verificacionExitosa && correo.equals("admin") && contraseña.equals("123")) {
+            // Guarda los datos del usuario en Usuario (Singleton)
+            Usuario usuario = Usuario.getInstance();
+            usuario.setId(id);
+            usuario.setNombre(nombre);
+            usuario.setApellido(apellido);
+            usuario.setEmail(email);
+            usuario.setClave(clave);
+            usuario.setMatchs(matchs);
+            usuario.setAmistades(amistades);
+
+            // Inicia la actividad Menu sin pasar datos adicionales
+            Intent intent = new Intent(Principal.this, Menu.class);
+            startActivity(intent);
             return true;
         }
 
-        return verificacionExitosa;
+        cursor.close();
+        db.close();
+        return false;
     }
+
+
 }

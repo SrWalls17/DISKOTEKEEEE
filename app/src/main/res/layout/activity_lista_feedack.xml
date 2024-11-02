@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- ImageView para el botón de "Atras" -->
+    <ImageView
+        android:id="@+id/regreso"
+        android:layout_width="172dp"
+        android:layout_height="94dp"
+        android:layout_gravity="start"
+        android:contentDescription="Botón Atras"
+        android:padding="16dp"
+        android:src="@drawable/atras" />
+
+    <!-- TextView que muestra los comentarios de feedback -->
+    <TextView
+        android:id="@+id/tv_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Feedback"
+        android:textSize="16sp"
+        android:padding="16dp" />
+
+</LinearLayout>
