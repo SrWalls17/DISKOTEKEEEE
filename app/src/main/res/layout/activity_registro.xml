@@ -118,6 +118,7 @@
         android:layout_marginStart="34dp"
         android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/textView9" />
+    <!-- Foto de perfil -->
 
     <Button
         android:id="@+id/btn_registro"
