@@ -2,9 +2,7 @@ package com.example.diskotekee;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,12 +12,26 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class Registro extends AppCompatActivity {
     EditText nombre, apellido, email, clave, clave2;
     Button btn_reg;
     Switch switchMatch, switchAmistades;
+
+    // Para Volley
+    RequestQueue requestQueue;
+    private static final String URL = "http://192.168.1.3/diskotekee/save.php";  // URL de tu servidor
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +40,7 @@ public class Registro extends AppCompatActivity {
 
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        // Inicializar los campos de entrada
         nombre = findViewById(R.id.txtnombre);
         apellido = findViewById(R.id.txtapellido);
         email = findViewById(R.id.txtemail);
@@ -36,6 +49,9 @@ public class Registro extends AppCompatActivity {
         btn_reg = findViewById(R.id.btn_registro);
         switchMatch = findViewById(R.id.switch_match);
         switchAmistades = findViewById(R.id.switch_amistades);
+
+        // Inicializar Volley RequestQueue
+        requestQueue = Volley.newRequestQueue(this);
 
         ImageView regresoImage = findViewById(R.id.regreso);
         regresoImage.setOnClickListener(new View.OnClickListener() {
@@ -68,41 +84,52 @@ public class Registro extends AppCompatActivity {
                 } else if (!claveStr.equals(clave2Str)) {
                     Toast.makeText(Registro.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
                 } else {
-                    guardar(nombreStr, apellidoStr, emailStr, claveStr);
+                    registrarUsuario(nombreStr, apellidoStr, emailStr, claveStr);
                 }
             }
         });
     }
 
-    public void guardar(String nom, String ape, String mai, String cla) {
-        ConexionDbHelper helper = new ConexionDbHelper(this);
-        SQLiteDatabase db = helper.getWritableDatabase(); // Cambia a getWritableDatabase()
-        try {
-            ContentValues datos = new ContentValues();
-            datos.put("Nombre", nom);
-            datos.put("Apellido", ape);
-            datos.put("Email", mai);
-            datos.put("Clave", cla);
+    // Método para registrar el usuario
+    private void registrarUsuario(final String nombre, final String apellido, final String email, final String clave) {
+        // Obtener los valores de los SwitchButtons
+        int matchValue = switchMatch.isChecked() ? 1 : 0;
+        int amistadesValue = switchAmistades.isChecked() ? 1 : 0;
 
-            // Obtener los valores de los SwitchButtons
-            int matchValue = switchMatch.isChecked() ? 1 : 0;
-            int amistadesValue = switchAmistades.isChecked() ? 1 : 0;
-
-            datos.put("MATCHS", matchValue);  // Guardar valor de match
-            datos.put("AMISTADES", amistadesValue);  // Guardar valor de amistades
-
-            long newRowId = db.insert("USUARIOS", null, datos); // Guarda y obtiene el ID de la nueva fila
-            if (newRowId != -1) {
-                Toast.makeText(this, "Datos ingresados correctamente. ID: " + newRowId, Toast.LENGTH_LONG).show();
-                finish();
-            } else {
-                Toast.makeText(this, "Error al registrar los datos", Toast.LENGTH_LONG).show();
+        // Realizar la solicitud POST con Volley
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Si la respuesta es exitosa
+                        Toast.makeText(Registro.this, "Registro exitoso", Toast.LENGTH_SHORT).show();
+                        finish();  // Finaliza la actividad
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // En caso de error
+                        Toast.makeText(Registro.this, "Error al registrar: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                // Pasamos los datos a la solicitud
+                Map<String, String> params = new HashMap<>();
+                params.put("nombre", nombre);
+                params.put("apellido", apellido);
+                params.put("email", email);
+                params.put("clave", clave);
+                params.put("matchs", String.valueOf(matchValue));
+                params.put("amistades", String.valueOf(amistadesValue));
+                return params;
             }
-        } catch (Exception e) {
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        } finally {
-            db.close(); // Asegúrate de cerrar la base de datos
-        }
+        };
+
+        // Añadimos la solicitud a la cola de Volley
+        requestQueue.add(stringRequest);
     }
 
     // Métodos de validación

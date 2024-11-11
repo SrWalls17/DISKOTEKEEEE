@@ -3,14 +3,20 @@ package com.example.diskotekee;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Amistades extends AppCompatActivity {
 
@@ -40,47 +46,50 @@ public class Amistades extends AppCompatActivity {
     }
 
     private void cargarAmistades() {
-        ConexionDbHelper helper = new ConexionDbHelper(this);
-        SQLiteDatabase db = helper.getReadableDatabase();
+        // URL del servidor PHP que devuelve los usuarios con matchs activados
+        String url = "http://192.168.1.3/diskotekee/amistades.php"; // Cambia la URL a la ubicación de tu archivo PHP
 
-        // Consulta para obtener los usuarios con amistades activadas
-        String[] columns = {"NOMBRE", "APELLIDO", "EMAIL"};
-        String selection = "AMISTADES = 1"; // Cambia esto a 1 para amigos activados
-        Cursor cursor = db.query("USUARIOS", columns, selection, null, null, null, null);
+        // Crear la solicitud de Volley
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        // Crear una cadena para almacenar los usuarios
+                        StringBuilder usuariosConMatch = new StringBuilder();
 
-        // Imprimir los nombres de las columnas para depuración
-        String[] columnNames = cursor.getColumnNames();
-        for (String columnName : columnNames) {
-            Log.d("Column Name", columnName); // Asegúrate de tener permisos de logging
-        }
+                        // Recorrer el JSON con los usuarios
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject usuario = response.getJSONObject(i);
+                                String nombre = usuario.getString("nombre");
+                                String apellido = usuario.getString("apellido");
 
-        // Verifica si hay resultados
-        if (cursor.getCount() > 0) {
-            StringBuilder usuariosList = new StringBuilder();
-            while (cursor.moveToNext()) {
-                int nombreIndex = cursor.getColumnIndex("NOMBRE");
-                int apellidoIndex = cursor.getColumnIndex("APELLIDO");
-                int emailIndex = cursor.getColumnIndex("EMAIL");
+                                // Agregar los datos al StringBuilder
+                                usuariosConMatch.append("Nombre: ").append(nombre)
+                                        .append(" ").append(apellido).append("\n");
+                            }
 
-                // Verifica si los índices son válidos
-                if (nombreIndex != -1 && apellidoIndex != -1 && emailIndex != -1) {
-                    String nombre = cursor.getString(nombreIndex);
-                    String apellido = cursor.getString(apellidoIndex);
-                    String email = cursor.getString(emailIndex);
-                    usuariosList.append("Nombre: ").append(nombre)
-                            .append(" ").append(apellido).append(" - Email: ").append(email).append("\n");
-                } else {
-                    Log.e("Column Index Error", "Uno de los índices es -1");
-                }
-            }
-            tvUsuarios.setText(usuariosList.toString());
-        } else {
-            // Mostrar mensaje si no hay usuarios
-            Toast.makeText(this, "No hay usuarios con amistades activadas", Toast.LENGTH_SHORT).show();
-        }
+                            // Establecer el texto en el TextView
+                            if (usuariosConMatch.length() > 0) {
+                                tvUsuarios.setText(usuariosConMatch.toString());
+                            } else {
+                                Toast.makeText(Amistades.this, "No hay usuarios con Match activado.", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(Amistades.this, "Error al procesar los datos.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Manejar error de la solicitud
+                        Toast.makeText(Amistades.this, "Error al realizar la solicitud", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-        // Cerrar el cursor y la base de datos
-        cursor.close();
-        db.close();
+        // Agregar la solicitud a la cola de Volley
+        Volley.newRequestQueue(this).add(request);
     }
 }

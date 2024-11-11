@@ -1,9 +1,7 @@
 package com.example.diskotekee;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log; // Importar Log para depuración
 import android.view.View;
@@ -13,7 +11,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class Principal extends AppCompatActivity {
+
     EditText usuario, password;
     TextView crear_cuenta; // Cambiado a TextView
     Button ingresar;
@@ -44,15 +55,8 @@ public class Principal extends AppCompatActivity {
                     // Muestra un mensaje de error si uno o ambos campos están vacíos
                     usuario.setError("Debe rellenar campos");
                     password.setError("Debe rellenar campos");
-                } else if (autenticarUsuario(correo, contraseña)) {
-                    // Autenticación exitosa, redirige al usuario a la actividad Modificar
-                    Intent actividadModificar = new Intent(Principal.this, Menu.class);
-                    actividadModificar.putExtra("EMAIL", correo); // Puedes pasar el correo si lo necesitas
-                    startActivity(actividadModificar);
                 } else {
-                    // Muestra un mensaje de error si las credenciales son incorrectas
-                    usuario.setError("Credenciales incorrectas");
-                    password.setError("Credenciales incorrectas");
+                    autenticarUsuario(correo, contraseña);
                 }
             }
         });
@@ -67,48 +71,100 @@ public class Principal extends AppCompatActivity {
         });
     }
 
-    private boolean autenticarUsuario(String correo, String contraseña) {
-        ConexionDbHelper helper = new ConexionDbHelper(this);
-        SQLiteDatabase db = helper.getReadableDatabase();
+    private void autenticarUsuario(final String correo, final String contraseña) {
+        String urlString = "http://192.168.1.3/diskotekee/login.php"; // URL de la API
 
-        String[] columns = {"ID", "NOMBRE", "APELLIDO", "EMAIL", "CLAVE", "MATCHS", "AMISTADES"};
-        String selection = "Email = ? AND Clave = ?";
-        String[] selectionArgs = {correo, contraseña};
+        // Crear un nuevo hilo para la solicitud HTTP (es necesario porque las solicitudes de red no se deben hacer en el hilo principal)
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Configurar la conexión HTTP
+                    URL url = new URL(urlString);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("POST");
+                    connection.setDoOutput(true);
+                    connection.setConnectTimeout(5000);
+                    connection.setReadTimeout(5000);
 
-        Cursor cursor = db.query("USUARIOS", columns, selection, selectionArgs, null, null, null);
+                    // Configurar los parámetros de la solicitud
+                    String postData = "email=" + correo + "&clave=" + contraseña;
+                    OutputStream os = connection.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                    writer.write(postData);
+                    writer.flush();
+                    writer.close();
+                    os.close();
 
-        if (cursor.moveToFirst()) {
-            long id = cursor.getLong(cursor.getColumnIndex("ID"));
-            String nombre = cursor.getString(cursor.getColumnIndex("NOMBRE"));
-            String apellido = cursor.getString(cursor.getColumnIndex("APELLIDO"));
-            String email = cursor.getString(cursor.getColumnIndex("EMAIL"));
-            String clave = cursor.getString(cursor.getColumnIndex("CLAVE"));
-            int matchs = cursor.getInt(cursor.getColumnIndex("MATCHS"));
-            int amistades = cursor.getInt(cursor.getColumnIndex("AMISTADES"));
+                    // Obtener la respuesta del servidor
+                    int responseCode = connection.getResponseCode();
 
-            cursor.close();
-            db.close();
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
+                        BufferedReader in = new BufferedReader(inputStreamReader);
+                        StringBuilder response = new StringBuilder();
+                        String inputLine;
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
+                        in.close();
 
-            // Guarda los datos del usuario en Usuario (Singleton)
-            Usuario usuario = Usuario.getInstance();
-            usuario.setId(id);
-            usuario.setNombre(nombre);
-            usuario.setApellido(apellido);
-            usuario.setEmail(email);
-            usuario.setClave(clave);
-            usuario.setMatchs(matchs);
-            usuario.setAmistades(amistades);
+                        // Procesar la respuesta JSON
+                        JSONObject jsonResponse = new JSONObject(response.toString());
 
-            // Inicia la actividad Menu sin pasar datos adicionales
-            Intent intent = new Intent(Principal.this, Menu.class);
-            startActivity(intent);
-            return true;
-        }
+                        if (jsonResponse.getString("status").equals("true")) {
+                            // Autenticación exitosa, redirigir al usuario a la actividad principal
+                            String id = jsonResponse.getString("id");
+                            String nombre = jsonResponse.getString("nombre");
+                            String apellido = jsonResponse.getString("apellido");
+                            String email = jsonResponse.getString("email");
+                            String clave = jsonResponse.getString("clave");
+                            String matchsStr = jsonResponse.getString("matchs");
+                            String amistadesStr = jsonResponse.getString("amistades");
 
-        cursor.close();
-        db.close();
-        return false;
+                            // Convertir matchs y amistades a enteros
+                            int matchs = Integer.parseInt(matchsStr);  // Convertir String a int
+                            int amistades = Integer.parseInt(amistadesStr);  // Convertir String a int
+
+                            // Guardar todos los datos en SharedPreferences
+                            SharedPreferences sharedPreferences = getSharedPreferences("Usuario", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("email", email);  // Guardamos el email
+                            editor.putString("nombre", nombre); // Guardar el nombre
+                            editor.putString("apellido", apellido); // Guardar el apellido
+                            editor.putString("id", id); // Guardar el id
+                            editor.putString("clave", clave); // Guardar la clave
+                            editor.putInt("matchs", matchs);  // Guardamos como int
+                            editor.putInt("amistades", amistades); // Guardamos como int
+                            editor.apply();
+
+                            // Redirigir a la actividad Menu
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent intent = new Intent(Principal.this, Menu.class);
+                                    startActivity(intent);
+                                    finish();  // Finaliza esta actividad para evitar que el usuario regrese al login con el botón de atrás
+                                }
+                            });
+                        } else {
+                            // Mostrar error de credenciales incorrectas
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    usuario.setError("Credenciales incorrectas");
+                                    password.setError("Credenciales incorrectas");
+                                }
+                            });
+                        }
+                    } else {
+                        Log.e("Principal", "Error en la conexión: " + responseCode);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("Principal", "Error en la autenticación", e);
+                }
+            }
+        }).start();
     }
-
-
 }

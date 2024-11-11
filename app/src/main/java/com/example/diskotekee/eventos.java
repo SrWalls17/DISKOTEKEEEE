@@ -1,15 +1,27 @@
 package com.example.diskotekee;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class eventos extends AppCompatActivity {
 
-    private int selectedCount = 0;
+    private TextView tvEventos;
     private Button buyButton;
 
     @Override
@@ -17,40 +29,48 @@ public class eventos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_eventos);
 
-        ImageView evento1 = findViewById(R.id.evento1);
-        ImageView evento2 = findViewById(R.id.evento2);
-        ImageView evento3 = findViewById(R.id.evento3);
-        buyButton = findViewById(R.id.buyButton);
 
-        View.OnClickListener clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                view.setSelected(!view.isSelected());
-                if (view.isSelected()) {
-                    selectedCount++;
-                    view.setAlpha(0.5f);  // Indica que está seleccionado
-                } else {
-                    selectedCount--;
-                    view.setAlpha(1.0f);  // Vuelve al estado normal
-                }
-                updateButton();
-            }
-        };
-
-        evento1.setOnClickListener(clickListener);
-        evento2.setOnClickListener(clickListener);
-        evento3.setOnClickListener(clickListener);
-
-        buyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Acción de compra
-                // Ejemplo: mostrar un mensaje o iniciar otra actividad
-            }
-        });
+        // Realizar solicitud para obtener los eventos
+        fetchEventos();
     }
 
-    private void updateButton() {
-        buyButton.setText("Comprar (" + selectedCount + " seleccionados)");
+    private void fetchEventos() {
+        // URL del archivo PHP que devuelve los eventos en formato JSON
+        String url = "http://198.168.1.3/diskotekee/consulta_img.php";
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        StringBuilder eventosText = new StringBuilder();
+
+                        // Iteramos sobre los eventos recibidos
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject evento = response.getJSONObject(i);
+                                String nombreEvento = evento.getString("nombre_evento");
+                                String imagenEvento = evento.getString("img_evento");
+
+                                // Agregamos el nombre del evento y la URL de la imagen al texto
+                                eventosText.append("Evento: ").append(nombreEvento).append("\n")
+                                        .append("Imagen: ").append(imagenEvento).append("\n\n");
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        // Actualizamos el TextView con los eventos
+                        tvEventos.setText(eventosText.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(eventos.this, "Error en la conexión", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Agregar la solicitud a la cola de Volley
+        Volley.newRequestQueue(this).add(jsonArrayRequest);
     }
 }

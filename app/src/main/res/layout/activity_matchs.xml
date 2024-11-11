@@ -15,12 +15,12 @@
         android:padding="16dp"
         android:src="@drawable/atras" />
 
-    <!-- TextView que muestra los usuarios -->
+    <!-- TextView que muestra los eventos -->
     <TextView
-        android:id="@+id/tv_usuarios"
+        android:id="@+id/tv_eventos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Usuarios"
+        android:text="Eventos disponibles..."
         android:textSize="16sp"
         android:padding="16dp" />
 

@@ -2,21 +2,19 @@ package com.example.diskotekee;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.Toast;
 
 public class ModificarEliminar extends AppCompatActivity {
     // Declaración de variables para la interfaz
-    EditText txtId, txtNombreMod, txtApellidoMod, txtCorreoMod, txtContra, txtContra2;
+    EditText txtId, txtNombreMod, txtApellidoMod, txtCorreoMod, txtContra, txtContra2, txtMatchs, txtAmistades;
     ImageView regreso;
     Button btnModificar;
-    Switch swMatch, swAmistad;
-    ConexionDbHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,47 +27,30 @@ public class ModificarEliminar extends AppCompatActivity {
         txtApellidoMod = findViewById(R.id.txtapellidomod);
         txtCorreoMod = findViewById(R.id.txtcorreomod);
         txtContra = findViewById(R.id.txtcontra);
-        txtContra2 = findViewById(R.id.txtcontra2);
-        regreso = findViewById(R.id.regreso);
+        txtMatchs = findViewById(R.id.txtmatch);
+        txtAmistades = findViewById(R.id.txtamistades);
         btnModificar = findViewById(R.id.btn_modificar);
-        swMatch = findViewById(R.id.sw_match);
-        swAmistad = findViewById(R.id.sw_amistad);
+        regreso = findViewById(R.id.regreso); // Inicializado el botón de regreso
 
         // Deshabilitar edición en el campo de ID
         txtId.setEnabled(false);
 
-        // Inicializar el helper de la base de datos
-        dbHelper = new ConexionDbHelper(this);
+        // Obtener los datos desde SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("Usuario", MODE_PRIVATE);
+        String email = sharedPreferences.getString("email", "");
+        String nombre = sharedPreferences.getString("nombre", "");
+        String apellido = sharedPreferences.getString("apellido", "");
+        int matchs = sharedPreferences.getInt("matchs", 0);  // Recuperar el valor de matchs
+        int amistades = sharedPreferences.getInt("amistades", 0);  // Recuperar el valor de amistades
 
-        // Obtener la instancia del usuario
-        Usuario usuario = Usuario.getInstance();
+        // Mostrar los datos recuperados en los EditTexts correspondientes
+        txtCorreoMod.setText(email);
+        txtNombreMod.setText(nombre);
+        txtApellidoMod.setText(apellido);
+        txtMatchs.setText(matchs == 1 ? "Sí" : "No");
+        txtAmistades.setText(amistades == 1 ? "Sí" : "No");
 
-        // Verificar si el usuario está inicializado (autenticado)
-        if (usuario.getEmail() != null) {
-            // Mostrar los datos del usuario en los EditText
-            txtId.setText(String.valueOf(usuario.getId()));
-            txtNombreMod.setText(usuario.getNombre());
-            txtApellidoMod.setText(usuario.getApellido());
-            txtCorreoMod.setText(usuario.getEmail());
-            txtContra.setText(usuario.getClave());
-            txtContra2.setText(usuario.getClave());
-
-            // Configurar los switches según los valores de matchs y amistades
-            swMatch.setChecked(usuario.getMatchs() == 1);
-            swAmistad.setChecked(usuario.getAmistades() == 1);
-
-            // Logs para depuración
-            Log.d("ModificarEliminar", "Nombre: " + usuario.getNombre());
-            Log.d("ModificarEliminar", "Apellido: " + usuario.getApellido());
-            Log.d("ModificarEliminar", "Email: " + usuario.getEmail());
-            Log.d("ModificarEliminar", "Clave: " + usuario.getClave());
-            Log.d("ModificarEliminar", "Matchs: " + usuario.getMatchs());
-            Log.d("ModificarEliminar", "Amistades: " + usuario.getAmistades());
-        } else {
-            Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show();
-        }
-
-        // Configurar el botón de regreso
+        // Configurar el botón de regreso para finalizar la actividad
         regreso.setOnClickListener(view -> finish());
 
         // Configurar el botón Modificar con un AlertDialog
@@ -79,34 +60,39 @@ public class ModificarEliminar extends AppCompatActivity {
                     .setTitle("Confirmar Modificación")
                     .setMessage("¿Estás seguro de que deseas modificar los datos del usuario?")
                     .setPositiveButton("Sí", (dialog, which) -> {
-                        // Guardar los cambios en la instancia de usuario
-                        usuario.setNombre(txtNombreMod.getText().toString());
-                        usuario.setApellido(txtApellidoMod.getText().toString());
-                        usuario.setEmail(txtCorreoMod.getText().toString());
-                        usuario.setClave(txtContra.getText().toString());
+                        // Validar que las contraseñas coincidan antes de proceder
+                        String nuevaClave = txtContra.getText().toString();
+                        String nuevaClave2 = txtContra2.getText().toString();
 
-                        // Actualizar los valores de matchs y amistades según el estado de los switches
-                        usuario.setMatchs(swMatch.isChecked() ? 1 : 0);
-                        usuario.setAmistades(swAmistad.isChecked() ? 1 : 0);
-
-                        // Llamar al método para actualizar el usuario en la base de datos
-                        boolean actualizado = dbHelper.actualizarUsuario(
-                                (int) usuario.getId(),
-                                usuario.getNombre(),
-                                usuario.getApellido(),
-                                usuario.getEmail(),
-                                usuario.getClave(),
-                                usuario.getMatchs(),
-                                usuario.getAmistades()
-                        );
-
-                        if (actualizado) {
-                            Toast.makeText(ModificarEliminar.this, "Datos modificados correctamente", Toast.LENGTH_SHORT).show();
+                        if (!nuevaClave.equals(nuevaClave2)) {
+                            // Si las contraseñas no coinciden, mostrar un error
+                            Toast.makeText(ModificarEliminar.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(ModificarEliminar.this, "Error al modificar los datos", Toast.LENGTH_SHORT).show();
-                        }
+                            // Guardar los cambios en los campos de texto
+                            String nuevoNombre = txtNombreMod.getText().toString();
+                            String nuevoApellido = txtApellidoMod.getText().toString();
+                            String nuevoCorreo = txtCorreoMod.getText().toString();
+                            int nuevoMatchs = txtMatchs.getText().toString().equals("Sí") ? 1 : 0;
+                            int nuevoAmistades = txtAmistades.getText().toString().equals("Sí") ? 1 : 0;
 
-                        dialog.dismiss();
+                            // Guardar los nuevos datos en SharedPreferences
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("nombre", nuevoNombre);
+                            editor.putString("apellido", nuevoApellido);
+                            editor.putString("email", nuevoCorreo);
+                            editor.putInt("matchs", nuevoMatchs);
+                            editor.putInt("amistades", nuevoAmistades);
+
+                            if (!nuevaClave.isEmpty()) {
+                                // Si se ingresó una nueva contraseña, guardarla
+                                editor.putString("password", nuevaClave);
+                            }
+                            editor.apply();
+
+                            // Mostrar un mensaje confirmando la modificación
+                            Toast.makeText(ModificarEliminar.this, "Datos modificados correctamente", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
                     })
                     .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                     .show();

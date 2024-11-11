@@ -1,89 +1,69 @@
 package com.example.diskotekee;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 public class Busqueda extends AppCompatActivity {
 
-    TextView tvUsuarios;
-    ImageView ivAtras;
+    private static final String URL = "http://192.168.1.3/diskotekee/buscar.php";  // Cambia la URL por la de tu servidor
+    private TextView tvUsuarios;
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_busqueda);
 
+        // Inicializar la cola de solicitudes
+        requestQueue = Volley.newRequestQueue(this);
+
+        // Obtener la referencia del TextView
         tvUsuarios = findViewById(R.id.tv_usuarios);
-        ivAtras = findViewById(R.id.regreso);
 
-        // Cargar los usuarios desde la base de datos y mostrarlos en el TextView
-        cargarUsuarios();
-
-        // Configurar el clic en la imagen "Atras" para regresar a la actividad Registro
-        ivAtras.setOnClickListener(new View.OnClickListener() {
+        // Configurar el botón de regreso
+        ImageView regresoImage = findViewById(R.id.regreso);
+        regresoImage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // Regresar a la actividad Registro
-                Intent intent = new Intent(Busqueda.this, Registro.class);
-                startActivity(intent);
-                finish(); // Finaliza la actividad actual
+            public void onClick(View view) {
+                finish();  // Simplemente finalizar la actividad y volver
             }
         });
+
+        // Obtener la lista de usuarios
+        obtenerUsuarios();
     }
 
-    private void cargarUsuarios() {
-        ConexionDbHelper helper = new ConexionDbHelper(this);
-        SQLiteDatabase db = helper.getReadableDatabase();
+    private void obtenerUsuarios() {
+        // Crear la solicitud para obtener los datos de los usuarios desde el servidor
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Mostrar la respuesta en el TextView
+                        tvUsuarios.setText(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Manejar error de conexión
+                        Toast.makeText(Busqueda.this, "Error al obtener usuarios", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-        Cursor cursor = null;
-        StringBuilder usuarios = new StringBuilder();
-
-        try {
-            cursor = db.rawQuery("SELECT * FROM USUARIOS", null);
-
-            if (cursor.getCount() == 0) {
-                Toast.makeText(this, "No hay usuarios registrados", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Recorre el cursor y añade cada registro a la variable StringBuilder
-            while (cursor.moveToNext()) {
-                // Obtener valores de las columnas de la tabla USUARIOS
-                long id = cursor.getLong(cursor.getColumnIndexOrThrow("ID")); // Obtener el ID
-                String nombre = cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE"));
-                String apellido = cursor.getString(cursor.getColumnIndexOrThrow("APELLIDO"));
-                String email = cursor.getString(cursor.getColumnIndexOrThrow("EMAIL"));
-                String clave = cursor.getString(cursor.getColumnIndexOrThrow("CLAVE"));
-                int match = cursor.getInt(cursor.getColumnIndexOrThrow("MATCHS"));
-                int amistades = cursor.getInt(cursor.getColumnIndexOrThrow("AMISTADES"));
-
-                // Añadir la información al StringBuilder, incluyendo el ID
-                usuarios.append("ID: ").append(id).append("\n")  // Mostrar el ID
-                        .append("Nombre: ").append(nombre).append("\n")
-                        .append("Apellido: ").append(apellido).append("\n")
-                        .append("Email: ").append(email).append("\n")
-                        .append("Clave: ").append(clave).append("\n")
-                        .append("Matchs: ").append(match).append("\n")
-                        .append("Amistades: ").append(amistades).append("\n\n"); // Añadir un salto de línea entre usuarios
-            }
-
-            // Muestra los usuarios en el TextView
-            tvUsuarios.setText(usuarios.toString());
-
-        } catch (Exception e) {
-            Toast.makeText(this, "Error al cargar usuarios: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        } finally {
-            if (cursor != null) {
-                cursor.close(); // Cierra el cursor después de usarlo
-            }
-            db.close(); // Cierra la conexión a la base de datos
-        }
+        // Agregar la solicitud a la cola de solicitudes
+        requestQueue.add(stringRequest);
     }
 }
