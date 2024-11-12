@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -19,15 +23,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity2"
-            android:exported="false"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.DISKOTEKEE" />
-        <activity
             android:name=".eventos"
             android:exported="false" />
         <activity
-            android:name=".ListaFeedback"
+            android:name=".VerdadoReto"
             android:exported="false" />
         <activity
             android:name=".Matchs"
@@ -44,10 +43,10 @@
             android:name=".Busqueda"
             android:exported="false" />
         <activity
-            android:name=".VerdadoReto"
+            android:name=".Ruleta"
             android:exported="false" />
         <activity
-            android:name=".Ruleta"
+            android:name=".ListaFeedback"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

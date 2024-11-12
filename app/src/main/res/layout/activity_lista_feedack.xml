@@ -3,25 +3,60 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@android:color/white"
+    android:scrollbars="vertical">
 
-    <!-- ImageView para el botón de "Atras" -->
+    <!-- Botón de "Atras" -->
     <ImageView
         android:id="@+id/regreso"
-        android:layout_width="172dp"
-        android:layout_height="94dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="start"
         android:contentDescription="Botón Atras"
-        android:padding="16dp"
-        android:src="@drawable/atras" />
+        android:src="@drawable/atras"
+        android:padding="8dp"
+        android:layout_marginBottom="16dp" />
 
-    <!-- TextView que muestra los comentarios de feedback -->
+    <!-- Título de la sección de Feedback -->
     <TextView
-        android:id="@+id/tv_feedback"
+        android:id="@+id/tv_feedback_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Feedback"
-        android:textSize="16sp"
-        android:padding="16dp" />
+        android:text="Comentarios de Feedback"
+        android:textSize="20sp"
+        android:textColor="#333333"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:textAlignment="center"
+        android:textStyle="bold" />
+
+    <!-- ScrollView para mostrar los comentarios -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <!-- Aquí se agregan dinámicamente los comentarios -->
+            <TextView
+                android:id="@+id/tv_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No hay comentarios disponibles."
+                android:textSize="16sp"
+                android:textColor="#555555"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="#f4f4f4"
+                android:gravity="start" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
