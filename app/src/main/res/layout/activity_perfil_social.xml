@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#48AFB0B1"
+    android:scrollbars="vertical">
+
+    <!-- Botón de "Atras" -->
+    <ImageView
+        android:id="@+id/regreso"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="start"
+        android:contentDescription="Botón Atras"
+        android:src="@drawable/atras"
+        android:padding="8dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Título de la sección de Perfil Social -->
+    <TextView
+        android:id="@+id/titulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Perfil Social"
+        android:textAlignment="center"
+        android:textColor="#333333"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- ScrollView para el contenido del perfil -->
+    <ScrollView
+        android:layout_width="376dp"
+        android:layout_height="656dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="370dp"
+            android:layout_height="10dp"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <!-- Edad -->
+            <TextView
+                android:id="@+id/edad_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Edad:"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Edad"
+                android:inputType="number" />
+
+            <!-- Descripción -->
+            <TextView
+                android:id="@+id/descripcion_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Breve descripción de tus gustos:"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/descripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Escribe aquí..."
+                android:inputType="textMultiLine"
+                android:lines="4" />
+
+            <!-- Ocupación -->
+            <TextView
+                android:id="@+id/ocupacion_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="A qué te dedicas:"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/ocupacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Escribe tu ocupación"
+                android:inputType="text" />
+
+            <!-- Instagram -->
+            <TextView
+                android:id="@+id/instagram_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Instagram:"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/instagram"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Tu usuario de Instagram"
+                android:inputType="text" />
+
+            <!-- Switch para Matchs -->
+            <TextView
+                android:id="@+id/matchs_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Aparecer en lista de Matchs:"
+                android:textSize="16sp" />
+
+            <Switch
+                android:id="@+id/switchMatchs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+
+            <!-- Switch para Amistades -->
+            <TextView
+                android:id="@+id/amistades_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Aparecer en lista de Amistades:"
+                android:textSize="16sp" />
+
+            <Switch
+                android:id="@+id/switchAmistades"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+
+            <!-- Botón de Enviar -->
+            <Button
+                android:id="@+id/btnEnviar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:text="Enviar" />
+
+            <Button
+                android:id="@+id/btnModificar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Modificar"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnEliminar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Eliminar"
+                android:visibility="gone" />
+
+
+
+            <!-- Mensaje de aviso al final -->
+            <TextView
+                android:id="@+id/aviso_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:text="Los datos que pongas aquí serán visibles."
+                android:textColor="#FF0000"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -22,7 +22,7 @@
         app:lottie_loop="true" />
 
     <Button
-        android:id="@+id/comprar"
+        android:id="@+id/perfil"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="129dp"
@@ -46,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comprar" />
+        app:layout_constraintTop_toBottomOf="@+id/perfil" />
 
     <Button
         android:id="@+id/btn_lista_feedback"

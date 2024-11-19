@@ -119,12 +119,7 @@ public class Principal extends AppCompatActivity {
                             String apellido = jsonResponse.getString("apellido");
                             String email = jsonResponse.getString("email");
                             String clave = jsonResponse.getString("clave");
-                            String matchsStr = jsonResponse.getString("matchs");
-                            String amistadesStr = jsonResponse.getString("amistades");
 
-                            // Convertir matchs y amistades a enteros
-                            int matchs = Integer.parseInt(matchsStr);  // Convertir String a int
-                            int amistades = Integer.parseInt(amistadesStr);  // Convertir String a int
 
                             // Guardar todos los datos en SharedPreferences
                             SharedPreferences sharedPreferences = getSharedPreferences("Usuario", MODE_PRIVATE);
@@ -134,8 +129,6 @@ public class Principal extends AppCompatActivity {
                             editor.putString("apellido", apellido); // Guardar el apellido
                             editor.putString("id", id); // Guardar el id
                             editor.putString("clave", clave); // Guardar la clave
-                            editor.putInt("matchs", matchs);  // Guardamos como int
-                            editor.putInt("amistades", amistades); // Guardamos como int
                             editor.apply();
 
                             // Redirigir a la actividad Menu

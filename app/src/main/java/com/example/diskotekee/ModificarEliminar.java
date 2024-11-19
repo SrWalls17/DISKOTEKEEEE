@@ -5,97 +5,128 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class ModificarEliminar extends AppCompatActivity {
-    // Declaración de variables para la interfaz
-    EditText txtId, txtNombreMod, txtApellidoMod, txtCorreoMod, txtContra, txtContra2, txtMatchs, txtAmistades;
-    ImageView regreso;
-    Button btnModificar;
+
+    private EditText txtNombre, txtApellido, txtCorreo, txtContra;
+    private Button btnModificar;
+
+    // URL del servidor para modificar usuario
+    private static final String URL_MODIFICAR = "http://192.168.1.3/diskotekee/modificarperfil.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modificar_eliminar);
 
-        // Inicializar las vistas
-        txtId = findViewById(R.id.txtid);
-        txtNombreMod = findViewById(R.id.txtnombremod);
-        txtApellidoMod = findViewById(R.id.txtapellidomod);
-        txtCorreoMod = findViewById(R.id.txtcorreomod);
+        // Vincular EditTexts y botón
+        txtNombre = findViewById(R.id.txtnombremod);
+        txtApellido = findViewById(R.id.txtapellidomod);
+        txtCorreo = findViewById(R.id.txtcorreomod);
         txtContra = findViewById(R.id.txtcontra);
-        txtMatchs = findViewById(R.id.txtmatch);
-        txtAmistades = findViewById(R.id.txtamistades);
         btnModificar = findViewById(R.id.btn_modificar);
-        regreso = findViewById(R.id.regreso); // Inicializado el botón de regreso
 
-        // Deshabilitar edición en el campo de ID
-        txtId.setEnabled(false);
-
-        // Obtener los datos desde SharedPreferences
+        // Recuperar datos desde SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("Usuario", MODE_PRIVATE);
-        String email = sharedPreferences.getString("email", "");
+        String id = sharedPreferences.getString("id", "ID no disponible");
         String nombre = sharedPreferences.getString("nombre", "");
         String apellido = sharedPreferences.getString("apellido", "");
-        int matchs = sharedPreferences.getInt("matchs", 0);  // Recuperar el valor de matchs
-        int amistades = sharedPreferences.getInt("amistades", 0);  // Recuperar el valor de amistades
+        String correo = sharedPreferences.getString("email", "");
+        String clave = sharedPreferences.getString("clave", "");
 
-        // Mostrar los datos recuperados en los EditTexts correspondientes
-        txtCorreoMod.setText(email);
-        txtNombreMod.setText(nombre);
-        txtApellidoMod.setText(apellido);
-        txtMatchs.setText(matchs == 1 ? "Sí" : "No");
-        txtAmistades.setText(amistades == 1 ? "Sí" : "No");
+        // Mostrar el ID en un Toast
+        Toast.makeText(this, "ID del Usuario: " + id, Toast.LENGTH_SHORT).show();
 
-        // Configurar el botón de regreso para finalizar la actividad
-        regreso.setOnClickListener(view -> finish());
+        // Cargar los datos en los campos de texto
+        txtNombre.setText(nombre);
+        txtApellido.setText(apellido);
+        txtCorreo.setText(correo);
+        txtContra.setText(clave);
 
-        // Configurar el botón Modificar con un AlertDialog
-        btnModificar.setOnClickListener(view -> {
-            // Crear y mostrar el AlertDialog
-            new AlertDialog.Builder(ModificarEliminar.this)
-                    .setTitle("Confirmar Modificación")
-                    .setMessage("¿Estás seguro de que deseas modificar los datos del usuario?")
-                    .setPositiveButton("Sí", (dialog, which) -> {
-                        // Validar que las contraseñas coincidan antes de proceder
-                        String nuevaClave = txtContra.getText().toString();
-                        String nuevaClave2 = txtContra2.getText().toString();
+        // Configurar el botón para modificar perfil
+        btnModificar.setOnClickListener(v -> {
+            String nuevoNombre = txtNombre.getText().toString();
+            String nuevoApellido = txtApellido.getText().toString();
+            String nuevoCorreo = txtCorreo.getText().toString();
+            String nuevaContra = txtContra.getText().toString();
 
-                        if (!nuevaClave.equals(nuevaClave2)) {
-                            // Si las contraseñas no coinciden, mostrar un error
-                            Toast.makeText(ModificarEliminar.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
-                        } else {
-                            // Guardar los cambios en los campos de texto
-                            String nuevoNombre = txtNombreMod.getText().toString();
-                            String nuevoApellido = txtApellidoMod.getText().toString();
-                            String nuevoCorreo = txtCorreoMod.getText().toString();
-                            int nuevoMatchs = txtMatchs.getText().toString().equals("Sí") ? 1 : 0;
-                            int nuevoAmistades = txtAmistades.getText().toString().equals("Sí") ? 1 : 0;
+            if (nuevoNombre.isEmpty() || nuevoApellido.isEmpty() || nuevoCorreo.isEmpty() || nuevaContra.isEmpty()) {
+                Toast.makeText(this, "Todos los campos son requeridos", Toast.LENGTH_SHORT).show();
+            } else {
+                new AlertDialog.Builder(this)
+                        .setTitle("Confirmación")
+                        .setMessage("¿Estás seguro de que deseas modificar tus datos?")
+                        .setPositiveButton("Sí", (dialog, which) -> modificarUsuario(id, nuevoNombre, nuevoApellido, nuevoCorreo, nuevaContra))
+                        .setNegativeButton("Cancelar", null)
+                        .show();
+            }
+        });
+    }
 
-                            // Guardar los nuevos datos en SharedPreferences
+    private void modificarUsuario(String id_usuario, String nuevoNombre, String nuevoApellido, String nuevoCorreo, String nuevaContra) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_MODIFICAR,
+                response -> {
+                    try {
+                        Log.d("ModificarUsuario", "Response: " + response);
+                        JSONObject jsonResponse = new JSONObject(response);
+
+                        if (jsonResponse.has("message")) {
+                            Toast.makeText(this, jsonResponse.getString("message"), Toast.LENGTH_SHORT).show();
+
+                            // Actualizar SharedPreferences con los nuevos datos
+                            SharedPreferences sharedPreferences = getSharedPreferences("Usuario", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("nombre", nuevoNombre);
                             editor.putString("apellido", nuevoApellido);
                             editor.putString("email", nuevoCorreo);
-                            editor.putInt("matchs", nuevoMatchs);
-                            editor.putInt("amistades", nuevoAmistades);
+                            editor.putString("clave", nuevaContra);
+                            editor.apply(); // Guardar los nuevos datos en SharedPreferences
 
-                            if (!nuevaClave.isEmpty()) {
-                                // Si se ingresó una nueva contraseña, guardarla
-                                editor.putString("password", nuevaClave);
-                            }
-                            editor.apply();
-
-                            // Mostrar un mensaje confirmando la modificación
-                            Toast.makeText(ModificarEliminar.this, "Datos modificados correctamente", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
+                            finish(); // Cerrar la actividad después de modificar
+                        } else if (jsonResponse.has("error")) {
+                            Toast.makeText(this, jsonResponse.getString("error"), Toast.LENGTH_SHORT).show();
+                            Log.e("ModificarUsuario", "Error: " + jsonResponse.getString("error"));
                         }
-                    })
-                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
-                    .show();
-        });
+                    } catch (JSONException e) {
+                        Log.e("ModificarUsuario", "JSON Exception: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    Log.e("ModificarUsuario", "Volley Error: " + error.toString());
+                    Toast.makeText(this, "Error al modificar los datos", Toast.LENGTH_SHORT).show();
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_usuario", id_usuario);
+                params.put("nombre", nuevoNombre);
+                params.put("apellido", nuevoApellido);
+                params.put("correo", nuevoCorreo);
+                params.put("clave", nuevaContra);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }

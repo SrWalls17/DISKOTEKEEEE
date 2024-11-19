@@ -63,10 +63,18 @@ public class Amistades extends AppCompatActivity {
                                 JSONObject usuario = response.getJSONObject(i);
                                 String nombre = usuario.getString("nombre");
                                 String apellido = usuario.getString("apellido");
+                                String edad = usuario.getString("edad");
+                                String gustos = usuario.getString("gustos");
+                                String instagram = usuario.getString("instagram");
+                                String ocupacion = usuario.getString("ocupacion");
 
                                 // Agregar los datos al StringBuilder
                                 usuariosConMatch.append("Nombre: ").append(nombre)
-                                        .append(" ").append(apellido).append("\n");
+                                        .append(" ").append(apellido).append("\n")
+                                        .append("Edad: ").append(edad).append("\n")
+                                        .append("Gustos: ").append(gustos).append("\n")
+                                        .append("Instagram: ").append(instagram).append("\n")
+                                        .append("Ocupación: ").append(ocupacion).append("\n\n");
                             }
 
                             // Establecer el texto en el TextView

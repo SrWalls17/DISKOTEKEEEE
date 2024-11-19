@@ -20,7 +20,7 @@
         app:lottie_loop="true" />
 
     <Button
-        android:id="@+id/comprar"
+        android:id="@+id/perfil"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -31,15 +31,15 @@
         app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/perfilsocial"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:backgroundTint="#373737"
-        android:text="Configuración"
+        android:text="Editar Perfil Social"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comprar" />
+        app:layout_constraintTop_toBottomOf="@+id/perfil" />
 
     <Button
         android:id="@+id/btn_salir"
@@ -51,7 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comprar" />
+        app:layout_constraintTop_toBottomOf="@+id/perfil" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

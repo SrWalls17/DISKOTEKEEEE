@@ -34,7 +34,7 @@ public class InicioFragment extends Fragment {
 
         Button feedbackButton = view.findViewById(R.id.feedback);
         Button listaFeedbackButton = view.findViewById(R.id.btn_lista_feedback);
-        Button comprarButton = view.findViewById(R.id.comprar);
+        Button comprarButton = view.findViewById(R.id.perfil);
 
         feedbackButton.setOnClickListener(new View.OnClickListener() {
             @Override

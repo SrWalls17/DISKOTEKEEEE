@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1988F1E8"
+    android:background="#48AFB0B1"
     tools:context=".Registro">
 
     <!-- Animation at the top -->
@@ -78,53 +78,11 @@
         android:hint="Rep. Contraseña"
         android:inputType="textPassword" />
 
-    <!-- Switch Match -->
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtclave2"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
-        android:text="¿Mostrar Perfil en Match?" />
-
-    <!-- Switch Amistades -->
-
-    <Switch
-        android:id="@+id/switch_match"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtclave2"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="18dp"
-        android:layout_toEndOf="@+id/textView6" />
-
-    <!-- Botón de Registro -->
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/switch_match"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="16dp"
-        android:text="¿Mostrar Perfil en Amistades?" />
-
-    <Switch
-        android:id="@+id/switch_amistades"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/switch_match"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="8dp"
-        android:layout_toEndOf="@+id/textView9" />
-    <!-- Foto de perfil -->
-
     <Button
         android:id="@+id/btn_registro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/switch_amistades"
+        android:layout_below="@id/txtclave2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:text="REGISTRAR" />
@@ -134,8 +92,8 @@
 
     <ImageView
         android:id="@+id/regreso"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="79dp"
+        android:layout_height="84dp"
         android:layout_gravity="start"
         android:contentDescription="Botón Atras"
         android:padding="16dp"

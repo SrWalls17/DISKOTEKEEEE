@@ -36,7 +36,6 @@ public class SocialFragment extends Fragment {
         // Encuentra los botones por su ID
         Button btnMatch = view.findViewById(R.id.btn_match);
         Button btnAmistades = view.findViewById(R.id.btn_amistades);
-        Button busquedaButton = view.findViewById(R.id.busqueda);
 
         // Configura el evento de clic para el botón de "Ver Matches"
         btnMatch.setOnClickListener(new View.OnClickListener() {
@@ -54,16 +53,6 @@ public class SocialFragment extends Fragment {
             public void onClick(View v) {
                 // Iniciar la actividad de Amistades
                 Intent intent = new Intent(getActivity(), Amistades.class);
-                startActivity(intent);
-            }
-        });
-
-        // Configura el evento de clic para el botón de "Búsqueda"
-        busquedaButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Iniciar la actividad de búsqueda
-                Intent intent = new Intent(getActivity(), Busqueda.class);
                 startActivity(intent);
             }
         });

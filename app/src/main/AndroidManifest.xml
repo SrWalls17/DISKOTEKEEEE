@@ -23,6 +23,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".QR"
+            android:exported="false" />
+        <activity
+            android:name=".PerfilSocial"
+            android:exported="false" />
+        <activity
             android:name=".eventos"
             android:exported="false" />
         <activity

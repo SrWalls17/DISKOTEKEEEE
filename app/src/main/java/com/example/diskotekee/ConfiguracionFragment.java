@@ -45,12 +45,21 @@ public class ConfiguracionFragment extends Fragment {
         });
 
         // Configuración del botón Modificar
-        Button modificarButton = view.findViewById(R.id.comprar);
+        Button modificarButton = view.findViewById(R.id.perfil);
         modificarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), ModificarEliminar.class);
                     startActivity(intent);
+            }
+        });
+
+        Button perfilsocial = view.findViewById(R.id.perfilsocial);
+        perfilsocial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), PerfilSocial.class);
+                startActivity(intent);
             }
         });
         return view;

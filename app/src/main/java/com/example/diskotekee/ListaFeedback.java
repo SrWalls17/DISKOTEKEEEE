@@ -35,7 +35,7 @@ public class ListaFeedback extends AppCompatActivity {
 
         // Acción del botón de regresar
         btnRegresar.setOnClickListener(view -> {
-            Intent intent = new Intent(ListaFeedback.this, Principal.class); // Cambia según sea necesario
+            Intent intent = new Intent(ListaFeedback.this, Menu.class); // Cambia según sea necesario
             startActivity(intent);
             finish();
         });

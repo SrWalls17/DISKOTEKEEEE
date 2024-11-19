@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 public class Registro extends AppCompatActivity {
     EditText nombre, apellido, email, clave, clave2;
     Button btn_reg;
-    Switch switchMatch, switchAmistades;
 
     // Para Volley
     RequestQueue requestQueue;
@@ -47,8 +46,6 @@ public class Registro extends AppCompatActivity {
         clave = findViewById(R.id.txtclave);
         clave2 = findViewById(R.id.txtclave2);
         btn_reg = findViewById(R.id.btn_registro);
-        switchMatch = findViewById(R.id.switch_match);
-        switchAmistades = findViewById(R.id.switch_amistades);
 
         // Inicializar Volley RequestQueue
         requestQueue = Volley.newRequestQueue(this);
@@ -57,7 +54,7 @@ public class Registro extends AppCompatActivity {
         regresoImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Registro.this, Busqueda.class);
+                Intent intent = new Intent(Registro.this, Principal.class);
                 startActivity(intent);
                 finish();
             }
@@ -92,9 +89,6 @@ public class Registro extends AppCompatActivity {
 
     // Método para registrar el usuario
     private void registrarUsuario(final String nombre, final String apellido, final String email, final String clave) {
-        // Obtener los valores de los SwitchButtons
-        int matchValue = switchMatch.isChecked() ? 1 : 0;
-        int amistadesValue = switchAmistades.isChecked() ? 1 : 0;
 
         // Realizar la solicitud POST con Volley
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
@@ -122,8 +116,6 @@ public class Registro extends AppCompatActivity {
                 params.put("apellido", apellido);
                 params.put("email", email);
                 params.put("clave", clave);
-                params.put("matchs", String.valueOf(matchValue));
-                params.put("amistades", String.valueOf(amistadesValue));
                 return params;
             }
         };

@@ -101,7 +101,7 @@ public class eventos extends AppCompatActivity {
 
             try {
                 // URL del archivo PHP que maneja la inserción
-                URL url = new URL("http://192.168.1.3/diskotekee/insertarcompra.php");
+                URL url = new URL("http://192.168.66.1/diskotekee/insertarcompra.php");
 
                 // Crear la conexión HTTP
                 HttpURLConnection connection;
