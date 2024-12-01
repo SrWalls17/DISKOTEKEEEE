@@ -1,20 +1,20 @@
 package com.example.diskotekee;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -29,8 +29,10 @@ public class ModificarEliminar extends AppCompatActivity {
     private EditText txtNombre, txtApellido, txtCorreo, txtContra;
     private Button btnModificar;
 
+    ImageView btnRegresar;
+
     // URL del servidor para modificar usuario
-    private static final String URL_MODIFICAR = "http://192.168.1.3/diskotekee/modificarperfil.php";
+    private static final String URL_MODIFICAR = "http://192.168.66.1/diskotekee/modificarperfil.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,17 @@ public class ModificarEliminar extends AppCompatActivity {
         txtCorreo = findViewById(R.id.txtcorreomod);
         txtContra = findViewById(R.id.txtcontra);
         btnModificar = findViewById(R.id.btn_modificar);
+        btnRegresar = findViewById(R.id.regreso);
+
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        btnRegresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Cierra la actividad actual y vuelve a la anterior
+                finish();
+            }
+        });
 
         // Recuperar datos desde SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("Usuario", MODE_PRIVATE);
@@ -52,8 +65,6 @@ public class ModificarEliminar extends AppCompatActivity {
         String correo = sharedPreferences.getString("email", "");
         String clave = sharedPreferences.getString("clave", "");
 
-        // Mostrar el ID en un Toast
-        Toast.makeText(this, "ID del Usuario: " + id, Toast.LENGTH_SHORT).show();
 
         // Cargar los datos en los campos de texto
         txtNombre.setText(nombre);

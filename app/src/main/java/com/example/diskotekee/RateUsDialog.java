@@ -2,39 +2,21 @@ package com.example.diskotekee;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.RatingBar;
-import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatButton;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import java.util.HashMap;
-import java.util.Map;
-
-import android.app.Dialog;
-import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,7 +78,7 @@ public class RateUsDialog extends Dialog {
     }
 
     private void enviarFeedback() {
-        String url = "http://192.168.1.3/diskotekee/submit_feedback.php";
+        String url = "http://192.168.66.1/diskotekee/submit_feedback.php";
         int estrellas = (int) userRate;
         String comentario = comentarioEditText.getText().toString();
 

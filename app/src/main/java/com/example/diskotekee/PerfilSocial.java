@@ -1,22 +1,20 @@
 package com.example.diskotekee;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -33,8 +31,10 @@ public class PerfilSocial extends AppCompatActivity {
     Button btnEnviar, btnModificar, btnEliminar;
     Switch switchMatchs, switchAmistades;
 
+    ImageView btnRegresar;
+
     // URL del servidor
-    String url = "http://192.168.1.3/diskotekee/perfilsocial.php";
+    String url = "http://192.168.66.1/diskotekee/perfilsocial.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +51,21 @@ public class PerfilSocial extends AppCompatActivity {
         btnEnviar = findViewById(R.id.btnEnviar);
         btnEliminar = findViewById(R.id.btnEliminar);
         btnModificar = findViewById(R.id.btnModificar);
+        btnRegresar = findViewById(R.id.regreso);
+
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        btnRegresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Cierra la actividad actual y vuelve a la anterior
+                finish();
+            }
+        });
 
         // Obtener el ID de usuario desde SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("Usuario", MODE_PRIVATE);
         String id_usuario = sharedPreferences.getString("id", "");
-
-        if (!id_usuario.isEmpty()) {
-            Toast.makeText(this, "ID de usuario: " + id_usuario, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Error: ID de usuario no encontrado", Toast.LENGTH_SHORT).show();
-        }
 
         // Ocultar botones inicialmente
         btnEliminar.setVisibility(View.GONE);
@@ -99,7 +104,7 @@ public class PerfilSocial extends AppCompatActivity {
     }
 
     private void obtenerDatosPerfil(String id_usuario) {
-        String url = "http://192.168.1.3/diskotekee/obtenerPerfil.php?id_usuario=" + id_usuario;
+        String url = "http://192.168.66.1/diskotekee/obtenerPerfil.php?id_usuario=" + id_usuario;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
@@ -118,10 +123,10 @@ public class PerfilSocial extends AppCompatActivity {
                         btnEnviar.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(this, "Error al cargar los datos del perfil", Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(this, "Error al obtener los datos", Toast.LENGTH_SHORT).show());
+                error ->{
+                });
 
         Volley.newRequestQueue(this).add(request);
     }
@@ -150,7 +155,7 @@ public class PerfilSocial extends AppCompatActivity {
 
     // Método para eliminar el usuario
     private void eliminarUsuario(String id_usuario) {
-        String url = "http://192.168.1.3/diskotekee/eliperfilsocial.php";
+        String url = "http://192.168.66.1/diskotekee/eliperfilsocial.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
@@ -197,7 +202,7 @@ public class PerfilSocial extends AppCompatActivity {
                 .setMessage("¿Estás seguro de que deseas modificar este perfil?")
                 .setPositiveButton("Sí", (dialog, which) -> {
                     // URL correcto para la modificación
-                    String urlModificacion = "http://192.168.1.3/diskotekee/modperfilsocial.php";
+                    String urlModificacion = "http://192.168.66.1/diskotekee/modperfilsocial.php";
 
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, urlModificacion,
                             response -> {
@@ -225,4 +230,14 @@ public class PerfilSocial extends AppCompatActivity {
                 .setNegativeButton("Cancelar", null)
                 .show();
     }
+    private void guardarDatosEnSharedPreferences(String edad, String gustos, String ocupacion, String instagram) {
+        SharedPreferences sharedPreferences = getSharedPreferences("Usuario", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("edad", edad);
+        editor.putString("gustos", gustos);
+        editor.putString("ocupacion", ocupacion);
+        editor.putString("instagram", instagram);
+        editor.apply();
+    }
+
 }

@@ -72,7 +72,7 @@ public class Principal extends AppCompatActivity {
     }
 
     private void autenticarUsuario(final String correo, final String contraseña) {
-        String urlString = "http://192.168.1.3/diskotekee/login.php"; // URL de la API
+        String urlString = "http://192.168.66.1/diskotekee/login.php"; // URL de la API
 
         // Crear un nuevo hilo para la solicitud HTTP (es necesario porque las solicitudes de red no se deben hacer en el hilo principal)
         new Thread(new Runnable() {

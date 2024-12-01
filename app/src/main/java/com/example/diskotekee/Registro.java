@@ -1,7 +1,5 @@
 package com.example.diskotekee;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,8 +7,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -30,7 +29,7 @@ public class Registro extends AppCompatActivity {
 
     // Para Volley
     RequestQueue requestQueue;
-    private static final String URL = "http://192.168.1.3/diskotekee/save.php";  // URL de tu servidor
+    private static final String URL = "http://192.168.66.1/diskotekee/save.php";  // URL de tu servidor
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

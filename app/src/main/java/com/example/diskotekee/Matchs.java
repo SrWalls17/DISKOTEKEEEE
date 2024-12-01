@@ -1,17 +1,20 @@
 package com.example.diskotekee;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -27,6 +30,7 @@ public class Matchs extends AppCompatActivity {
 
         tvUsuarios = findViewById(R.id.tv_usuarios);
         btnRegresar = findViewById(R.id.regreso);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // Llenar el TextView con usuarios que tienen activado el Match
         mostrarUsuariosConMatch();
@@ -35,16 +39,17 @@ public class Matchs extends AppCompatActivity {
         btnRegresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Matchs.this, Principal.class); // Cambia esto según sea necesario
-                startActivity(intent);
+                // Cierra la actividad actual y vuelve a la anterior
                 finish();
             }
         });
+
+
     }
 
     private void mostrarUsuariosConMatch() {
         // URL del servidor PHP que devuelve los usuarios con matchs activados
-        String url = "http://192.168.1.3/diskotekee/matchs.php"; // Cambia la URL a la ubicación de tu archivo PHP
+        String url = "http://192.168.66.1/diskotekee/matchs.php"; // Cambia la URL a la ubicación de tu archivo PHP
 
         // Crear la solicitud de Volley
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,

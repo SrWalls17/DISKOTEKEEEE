@@ -30,7 +30,7 @@
             android:id="@+id/titulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Usuarios con Match"
+            android:text="Entradas Compradas"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#333333"
@@ -40,10 +40,10 @@
 
         <!-- Texto con la lista de usuarios -->
         <TextView
-            android:id="@+id/tv_usuarios"
+            android:id="@+id/tv_entradas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cargando usuarios..."
+            android:text="Cargando entradas..."
             android:textSize="16sp"
             android:lineSpacingExtra="4dp"
             android:textColor="#555555"

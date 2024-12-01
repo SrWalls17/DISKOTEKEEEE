@@ -5,8 +5,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,151 +24,155 @@ public class eventos extends AppCompatActivity {
 
     private CheckBox checkBoxBombofica, checkBoxBandaTropical, checkBoxFrancoElGorila;
     private Button buttonComprar;
-    private TextView totalPrecioTextView;  // Nueva variable para mostrar el precio total
-    private int totalPrecio = 0;  // Variable para almacenar el precio total
+    private TextView totalPrecioTextView;
+    private int totalPrecio = 0;
+    private String idUsuario;
+
+    ImageView btnRegresar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_eventos);
 
-        // Referenciar los CheckBox y el botón
+        // Referencias
         checkBoxBombofica = findViewById(R.id.checkbox_bombofica);
         checkBoxBandaTropical = findViewById(R.id.checkbox_bandatropical);
         checkBoxFrancoElGorila = findViewById(R.id.checkbox_francoelgorila);
         buttonComprar = findViewById(R.id.button_comprar);
-        totalPrecioTextView = findViewById(R.id.text_precio_total); // Referenciar el TextView para el total
+        totalPrecioTextView = findViewById(R.id.text_precio_total);
 
-        // Establecer los OnCheckedChangeListeners para cada CheckBox
+        // Listener para actualizar el precio
         checkBoxBombofica.setOnCheckedChangeListener((buttonView, isChecked) -> actualizarPrecio(isChecked, 10000));
         checkBoxBandaTropical.setOnCheckedChangeListener((buttonView, isChecked) -> actualizarPrecio(isChecked, 10000));
         checkBoxFrancoElGorila.setOnCheckedChangeListener((buttonView, isChecked) -> actualizarPrecio(isChecked, 10000));
 
-        // Obtener datos del usuario desde SharedPreferences
+        // ID del usuario
         SharedPreferences sharedPreferences = getSharedPreferences("Usuario", MODE_PRIVATE);
-        String idUsuario = sharedPreferences.getString("id", ""); // Obtener el ID del usuario
+        idUsuario = sharedPreferences.getString("id", "");
 
-        // Configurar el botón de Comprar
+        // Cargar eventos comprados previamente
+        cargarEventosComprados();
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
+        // Botón Comprar
         buttonComprar.setOnClickListener(v -> {
             StringBuilder eventosSeleccionados = new StringBuilder();
             StringBuilder detalleCompra = new StringBuilder();
 
-            // Agregar los eventos seleccionados al detalle de compra
             if (checkBoxBombofica.isChecked()) {
                 detalleCompra.append("Evento: Bombofica\nPrecio: $10.000\n\n");
-                eventosSeleccionados.append("2,"); // id_evento = 2
+                eventosSeleccionados.append("2,");
             }
             if (checkBoxBandaTropical.isChecked()) {
                 detalleCompra.append("Evento: Banda Tropical\nPrecio: $10.000\n\n");
-                eventosSeleccionados.append("3,"); // id_evento = 3
+                eventosSeleccionados.append("3,");
             }
             if (checkBoxFrancoElGorila.isChecked()) {
                 detalleCompra.append("Evento: Franco El Gorila\nPrecio: $10.000\n\n");
-                eventosSeleccionados.append("4,"); // id_evento = 4
+                eventosSeleccionados.append("4,");
             }
 
-            // Verificar que al menos un evento fue seleccionado
             if (totalPrecio > 0) {
-                // Mostrar el detalle de compra como Toast
                 Toast.makeText(eventos.this, detalleCompra.toString(), Toast.LENGTH_LONG).show();
-
-                // Mostrar el ID del usuario y los eventos seleccionados
-                Toast.makeText(eventos.this, "ID Usuario: " + idUsuario + "\nEventos Seleccionados: " + eventosSeleccionados.toString(), Toast.LENGTH_LONG).show();
-
-                // Enviar los datos al servidor para insertar en la base de datos, incluyendo el ID del usuario
                 new EnviarCompraTask().execute(idUsuario, eventosSeleccionados.toString());
             } else {
                 Toast.makeText(eventos.this, "Seleccione al menos un evento para comprar.", Toast.LENGTH_SHORT).show();
             }
         });
+
+        btnRegresar = findViewById(R.id.regreso);
+        // Acción del botón de regresar
+        btnRegresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Cierra la actividad actual y vuelve a la anterior
+                finish();
+            }
+        });
     }
 
-    // Método para actualizar el precio total
+    private void cargarEventosComprados() {
+        SharedPreferences sharedPreferences = getSharedPreferences("EventosComprados_" + idUsuario, MODE_PRIVATE);
+
+        if (sharedPreferences.getBoolean("eventoBombofica", false)) {
+            checkBoxBombofica.setChecked(true);
+            checkBoxBombofica.setEnabled(false); // Bloquear el CheckBox
+        }
+        if (sharedPreferences.getBoolean("eventoBandaTropical", false)) {
+            checkBoxBandaTropical.setChecked(true);
+            checkBoxBandaTropical.setEnabled(false);
+        }
+        if (sharedPreferences.getBoolean("eventoFrancoElGorila", false)) {
+            checkBoxFrancoElGorila.setChecked(true);
+            checkBoxFrancoElGorila.setEnabled(false);
+        }
+    }
+
     private void actualizarPrecio(boolean isChecked, int precioEvento) {
         if (isChecked) {
-            totalPrecio += precioEvento;  // Agregar precio si el CheckBox está marcado
+            totalPrecio += precioEvento;
         } else {
-            totalPrecio -= precioEvento;  // Restar precio si el CheckBox está desmarcado
+            totalPrecio -= precioEvento;
         }
-        totalPrecioTextView.setText("Total: $" + totalPrecio);  // Actualizar el TextView con el total
+        totalPrecioTextView.setText("Total: $" + totalPrecio);
     }
 
     private class EnviarCompraTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            String idUsuario = params[0];  // ID del usuario
-            String eventosSeleccionados = params[1]; // Recibir los id_evento seleccionados
-
+            String idUsuario = params[0];
+            String eventosSeleccionados = params[1];
             String[] eventos = eventosSeleccionados.split(",");
 
             try {
-                // URL del archivo PHP que maneja la inserción
                 URL url = new URL("http://192.168.66.1/diskotekee/insertarcompra.php");
-
-                // Crear la conexión HTTP
-                HttpURLConnection connection;
-                int responseCode = -1;
                 StringBuilder response = new StringBuilder();
+                HttpURLConnection connection;
 
-                // Enviar una consulta por cada evento seleccionado
                 for (String evento : eventos) {
                     if (!evento.isEmpty()) {
-                        // Crear conexión para cada evento
                         connection = (HttpURLConnection) url.openConnection();
                         connection.setRequestMethod("POST");
                         connection.setDoOutput(true);
                         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
-                        // Suponiendo un precio fijo de 10,000 por evento
                         int precioEvento = 10000;
-
-                        // Crear el cuerpo de la solicitud POST para cada evento
                         String postData = "id_usuario=" + idUsuario + "&id_evento=" + evento + "&precio=" + precioEvento;
 
-                        // Escribir los datos en el flujo de salida de la conexión
                         OutputStream outputStream = connection.getOutputStream();
                         outputStream.write(postData.getBytes());
                         outputStream.flush();
                         outputStream.close();
 
-                        // Leer la respuesta del servidor
                         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                         String line;
                         while ((line = reader.readLine()) != null) {
                             response.append(line);
                         }
                         reader.close();
-
-                        // Verificar el código de respuesta
-                        responseCode = connection.getResponseCode();
                     }
                 }
 
-                // Log para mostrar la respuesta completa
-                Log.d("Respuesta del Servidor", "Código de respuesta: " + responseCode);
-                Log.d("Respuesta del Servidor", "Respuesta: " + response.toString());
+                // Guardar eventos comprados para el usuario actual
+                SharedPreferences sharedPreferences = getSharedPreferences("EventosComprados_" + idUsuario, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (checkBoxBombofica.isChecked()) editor.putBoolean("eventoBombofica", true);
+                if (checkBoxBandaTropical.isChecked()) editor.putBoolean("eventoBandaTropical", true);
+                if (checkBoxFrancoElGorila.isChecked()) editor.putBoolean("eventoFrancoElGorila", true);
+                editor.apply();
 
-                // Verificar si todo salió bien
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    return "Compra procesada correctamente. Respuesta: " + response.toString();
-                } else {
-                    return "Error en la compra: " + responseCode + " - " + response.toString();
-                }
-
+                return "Compra procesada correctamente.";
             } catch (Exception e) {
                 e.printStackTrace();
-                // Log para errores en la conexión
-                Log.e("Error de Conexión", e.getMessage(), e);
                 return "Error de conexión: " + e.getMessage();
             }
         }
 
         @Override
         protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            // Mostrar el resultado del servidor en un Toast
             Toast.makeText(eventos.this, result, Toast.LENGTH_LONG).show();
-            // También registrar el resultado en Logcat
             Log.d("Resultado de Compra", result);
         }
     }

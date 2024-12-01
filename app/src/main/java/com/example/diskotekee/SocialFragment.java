@@ -2,11 +2,12 @@ package com.example.diskotekee;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
 
 public class SocialFragment extends Fragment {
 
@@ -36,6 +37,7 @@ public class SocialFragment extends Fragment {
         // Encuentra los botones por su ID
         Button btnMatch = view.findViewById(R.id.btn_match);
         Button btnAmistades = view.findViewById(R.id.btn_amistades);
+        Button btnQr = view.findViewById(R.id.btnQR);
 
         // Configura el evento de clic para el botón de "Ver Matches"
         btnMatch.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +58,15 @@ public class SocialFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        btnQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), QR.class);
+                startActivity(intent);
+            }
+        });
+
 
         return view;
     }

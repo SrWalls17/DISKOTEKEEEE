@@ -85,10 +85,8 @@
         android:layout_below="@id/txtclave2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
+        android:backgroundTint="#373737"
         android:text="REGISTRAR" />
-
-    <!-- Botón para regresar -->
-    <!-- Pie de página -->
 
     <ImageView
         android:id="@+id/regreso"
@@ -98,12 +96,5 @@
         android:contentDescription="Botón Atras"
         android:padding="16dp"
         android:src="@drawable/atras" />
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="walls.cl" />
 
 </RelativeLayout>

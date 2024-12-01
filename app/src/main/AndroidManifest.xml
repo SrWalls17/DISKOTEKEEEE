@@ -23,6 +23,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".EscanearQRActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Entradas"
+            android:exported="false" />
+        <activity
             android:name=".QR"
             android:exported="false" />
         <activity

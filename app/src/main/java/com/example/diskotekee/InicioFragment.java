@@ -35,6 +35,7 @@ public class InicioFragment extends Fragment {
         Button feedbackButton = view.findViewById(R.id.feedback);
         Button listaFeedbackButton = view.findViewById(R.id.btn_lista_feedback);
         Button comprarButton = view.findViewById(R.id.perfil);
+        Button entradasButton = view.findViewById(R.id.btn_entradas);
 
         feedbackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +59,14 @@ public class InicioFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), eventos.class);
+                startActivity(intent);
+            }
+        });
+
+        entradasButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), Entradas.class);
                 startActivity(intent);
             }
         });

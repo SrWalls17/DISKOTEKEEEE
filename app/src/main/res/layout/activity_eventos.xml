@@ -1,118 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#48AFB0B1"
     android:padding="16dp">
 
-    <LinearLayout
-        android:id="@+id/eventos_container"
-        android:layout_width="match_parent"
+    <!-- Botón de regreso -->
+
+    <!-- Título centrado -->
+
+    <!-- ScrollView con los eventos -->
+
+    <ImageView
+        android:id="@+id/regreso"
+        android:layout_width="50dp"
+        android:layout_height="84dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="2dp"
+        android:contentDescription="Botón Atras"
+        android:padding="8dp"
+        android:src="@drawable/atras" />
+
+    <TextView
+        android:id="@+id/text_eventos_disponibles"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        android:layout_toEndOf="@id/regreso"
+        android:gravity="center"
+        android:text="Eventos Disponibles"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
-        <!-- Bombofica Event -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/text_eventos_disponibles"
+        android:layout_marginTop="38dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/image_bombofica"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/bombofica" />
-
-            <TextView
-                android:id="@+id/text_bombofica"
-                android:layout_width="0dp"
+            <!-- Contenedor de eventos -->
+            <LinearLayout
+                android:id="@+id/eventos_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="8dp"
-                android:text="Evento: Bombofica\nDescripción: Chistes y comedia\nPrecio:$10.000"
-                android:textSize="16sp" />
+                android:orientation="vertical">
 
-            <CheckBox
-                android:id="@+id/checkbox_bombofica"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <!-- Bombofica Event -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/image_bombofica"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/bombofica" />
+
+                    <TextView
+                        android:id="@+id/text_bombofica"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="8dp"
+                        android:text="Evento: Bombofica\nDescripción: Chistes y comedia\nPrecio:$10.000"
+                        android:textSize="16sp" />
+
+                    <CheckBox
+                        android:id="@+id/checkbox_bombofica"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <!-- Banda Tropical Event -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/image_bandatropical"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/bandatropical" />
+
+                    <TextView
+                        android:id="@+id/text_bandatropical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="8dp"
+                        android:text="Evento: Banda Tropical\nDescripción: Cumbia\nPrecio:$10.000"
+                        android:textSize="16sp" />
+
+                    <CheckBox
+                        android:id="@+id/checkbox_bandatropical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <!-- Franco El Gorila Event -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/image_francoelgorila"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/francoelgorila" />
+
+                    <TextView
+                        android:id="@+id/text_francoelgorila"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="8dp"
+                        android:text="Evento: Franco El Gorila\nDescripción: Reggaeton\nPrecio:$10.000"
+                        android:textSize="16sp" />
+
+                    <CheckBox
+                        android:id="@+id/checkbox_francoelgorila"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <!-- Precio total -->
+                <TextView
+                    android:id="@+id/text_precio_total"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:padding="16dp"
+                    android:text="Precio Total: $0"
+                    android:textColor="#FF5722"
+                    android:textSize="18sp" />
+
+                <!-- Botón Comprar -->
+                <Button
+                    android:id="@+id/button_comprar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="#373737"
+                    android:padding="16dp"
+                    android:text="Comprar" />
+            </LinearLayout>
         </LinearLayout>
-
-        <!-- Banda Tropical Event -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <ImageView
-                android:id="@+id/image_bandatropical"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/bandatropical" />
-
-            <TextView
-                android:id="@+id/text_bandatropical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="8dp"
-                android:text="Evento: Banda Tropical\nDescripción: Cumbia\nPrecio:$10.000"
-                android:textSize="16sp" />
-
-            <CheckBox
-                android:id="@+id/checkbox_bandatropical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <!-- Franco El Gorila Event -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <ImageView
-                android:id="@+id/image_francoelgorila"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/francoelgorila" />
-
-            <TextView
-                android:id="@+id/text_francoelgorila"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="8dp"
-                android:text="Evento: Franco El Gorila\nDescripción: Reggaeton\nPrecio:$10.000"
-                android:textSize="16sp" />
-
-            <CheckBox
-                android:id="@+id/checkbox_francoelgorila"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <!-- Precio total -->
-        <TextView
-            android:id="@+id/text_precio_total"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Precio Total: $0"
-            android:textSize="18sp"
-            android:padding="16dp"
-            android:layout_marginTop="16dp"
-            android:textColor="#FF5722"/>
-
-        <!-- Botón Comprar -->
-        <Button
-            android:id="@+id/button_comprar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Comprar"
-            android:padding="16dp"
-            android:layout_marginTop="16dp" />
-
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</RelativeLayout>

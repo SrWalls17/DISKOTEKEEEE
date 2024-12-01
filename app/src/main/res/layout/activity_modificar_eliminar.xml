@@ -7,8 +7,23 @@
     android:background="#48AFB0B1"
     tools:context=".ModificarEliminar">
 
+    <!-- Título de la actividad -->
 
     <!-- EditText para Nombres -->
+
+    <TextView
+        android:id="@+id/tituloModificacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="88dp"
+        android:text="Modificación de Perfil"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/txtnombremod"
         android:layout_width="0dp"
@@ -22,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/regreso" />
+        app:layout_constraintTop_toBottomOf="@id/tituloModificacion" />
 
     <!-- EditText para Apellidos -->
     <EditText
@@ -69,26 +84,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtcorreomod" />
 
-    <!-- Botón Modificar -->
+    <!-- Botón Modificar con color negro -->
     <Button
         android:id="@+id/btn_modificar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#4DBD52"
+        android:layout_width="375dp"
+        android:layout_height="43dp"
+        android:backgroundTint="#000000"
         android:text="Modificar"
+        android:textColor="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtcontra" />
+
     <!-- Icono Regresar -->
     <ImageView
         android:id="@+id/regreso"
-        android:layout_width="82dp"
+        android:layout_width="50dp"
         android:layout_height="73dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/atras"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

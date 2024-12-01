@@ -1,12 +1,13 @@
 package com.example.diskotekee;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,19 +31,23 @@ public class ListaFeedback extends AppCompatActivity {
         tvFeedback = findViewById(R.id.tv_feedback);
         btnRegresar = findViewById(R.id.regreso);
 
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
         // Mostrar los comentarios de feedback desde la API
         mostrarComentariosDeFeedback();
 
-        // Acción del botón de regresar
-        btnRegresar.setOnClickListener(view -> {
-            Intent intent = new Intent(ListaFeedback.this, Menu.class); // Cambia según sea necesario
-            startActivity(intent);
-            finish();
+        btnRegresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Cierra la actividad actual y vuelve a la anterior
+                finish();
+            }
         });
     }
 
     private void mostrarComentariosDeFeedback() {
-        String url = "http://192.168.1.3/diskotekee/consulta_feedback.php";  // URL de tu API
+        String url = "http://192.168.66.1/diskotekee/consulta_feedback.php";  // URL de tu API
 
         // Crear la solicitud GET
         RequestQueue requestQueue = Volley.newRequestQueue(this);
